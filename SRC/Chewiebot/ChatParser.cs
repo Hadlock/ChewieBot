@@ -133,6 +133,56 @@
             return value;
         }
 
+        // The class called that handles Chat room messages
+        LogVars log = new LogVars ();
+
+        // defines the arrays for the Chat room parsing
+        public bool getLogSettings ()
+        {
+            log.settingfile ();
+            return true;
+        }
+
+        // handles commands if there is one to handle
+        void handleCommands ( int cnt, string chewieCMD, string webURL )
+        {
+           
+            string respondSTR = "Acknowledged. Processing...";
+
+
+            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
+
+            //Sends an HTTP request to the specific file
+            byte[] chewieBuf = new byte[ 8192 ];
+            HttpWebRequest chewieWeb = ( ( HttpWebRequest ) WebRequest.Create ( webURL ) );
+            HttpWebResponse chewieRes = ( ( HttpWebResponse ) chewieWeb.GetResponse () );
+
+            Stream readChewie = chewieRes.GetResponseStream ();
+
+            int count = 0;
+
+            do
+            {
+                count = readChewie.Read ( chewieBuf, 0, chewieBuf.Length );
+
+                if ( count != 0 )
+                {
+                    respondSTR = Encoding.ASCII.GetString ( chewieBuf, 0, count );
+                }
+            }
+            while ( count > 0 );
+
+            // clean up the string removing html parses
+            string[] htmlClear = { "<br />", "<strong>", "</strong>" };
+
+            for ( int i = 0; i < 3; ++i )
+            {
+                respondSTR = respondSTR.Replace ( htmlClear[ i ], "" );
+            }
+            
+            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
+           
+        }
 
        // Parse ChatRoom messages
         void ChatRoomMsg ( ChatRoomMsg_t chatMsg )
@@ -144,8 +194,6 @@
             int len = getChatMsg ( clientFriends.Interface, chatMsg.m_ulSteamIDChat, ( int ) chatMsg.m_iChatID, ref chatter, msgData, msgData.Length, ref chatType );
 
             len = Clamp ( len, 1, msgData.Length );
-
-            LogVars log = new LogVars ();
 
             log.IsGroupMsg = true;
             log.ChatRoom = chatMsg.m_ulSteamIDChat;
@@ -162,66 +210,46 @@
             log.MessageType = chatType;
             log.MessageTime = DateTime.Now;
 
+            //for ( int cnt = 0; cnt < (log.roomCMDGET.Length - 1); ++cnt )
+            //{
 
-           // if ( log.ChatRoomName == "Battlfield Goons" )
-           // {
+            string webURL = "";
+            string chewieCMD = "";
 
-
-                if ( log.Message == "!lolocaust" )
+            for ( int cnt = 0; cnt < 64; ++cnt )
+            {
+                // Why bother scanning empty arrays?
+                if ( log.roomCMDGET[ cnt, 0 ] == null )
+                    return;
+                //Debug commands
+                //Program.parsetoChewie ( "Name: " + log.roomCMDGET[ cnt, 0 ] );
+                if ( log.roomCMDGET[ cnt, 0 ] == log.ChatRoomName )
                 {
-                    // If somebody says the appropriate message in chat room, run this.
-
-                    string testStr = "Acknowledged. Processing...";
-                    sendChatMsg ( clientFriends.Interface, log.ChatRoom, chatType, System.Text.Encoding.UTF8.GetBytes ( testStr ), testStr.Length + 1 );
-
-                    //ProcessStartInfo kickScript = new ProcessStartInfo ( "python", "kick.py" );
-                    //kickScript.UseShellExecute = false;
-                    //kickScript.CreateNoWindow = true;
-
-                    //Sends an HTTP request to the specific file
-                    byte[] chewieBuf = new byte[ 8192 ];
-                    HttpWebRequest chewieWeb = ( ( HttpWebRequest ) WebRequest.Create ( "http://path/to/lolocaust.php " ) );
-                    HttpWebResponse chewieRes = ( ( HttpWebResponse ) chewieWeb.GetResponse () );
-
-                    Stream readChewie = chewieRes.GetResponseStream ();
-
-                    int count = 0;
-
-                    do
+                    for ( int comval = 1; comval < 129; ++ comval )
                     {
-                        count = readChewie.Read ( chewieBuf, 0, chewieBuf.Length );
+                        // Again, why bother with empty arrays?
+                        if ( log.roomCMDGET[ cnt, comval ] == null )
+                            return;
 
-                        if ( count != 0 )
+                        if ( log.roomCMDGET[ cnt, comval ].Equals (log.Message ) )
                         {
-                            testStr = Encoding.ASCII.GetString ( chewieBuf, 0, count );
+                            chewieCMD = log.roomCMDGET[ cnt, comval ];
+                            ++comval;
+                            webURL = log.roomCMDGET[ cnt, comval ];
+                            handleCommands ( cnt, chewieCMD, webURL );
+                            break;
                         }
+                        ++comval;
                     }
-                    while ( count > 0 );
-
-                    // clean up the string removing html parses
-                    string[] htmlClear = { "<br />", "<strong>", "</strong>" };
-
-                    for ( int i = 0; i < 3; ++i )
-                    {
-                        testStr = testStr.Replace ( htmlClear[ i ], "" );
-                    }
-
-
-                    //Process startApp = Process.Start ( kickScript );
-                    // while ( !startApp.HasExited )
-                    //    startApp.WaitForExit ( 10 ); // Give the process time to exit.
-
-                    //testStr = "A pubbie has been successfully kicked at [" + log.MessageTime + "]";
-                    //if ( startApp.HasExited )
-
-                    sendChatMsg ( clientFriends.Interface, log.ChatRoom, chatType, System.Text.Encoding.UTF8.GetBytes ( testStr ), testStr.Length + 1 );
+                    
                 }
-           // }
+            }
 
             string roomMessage = ( "[" +log.MessageTime + "] From " + log.SenderName + " in " + log.ChatRoomName + ": " + log.Message);
             Program.parsetoChewie ( roomMessage );
         }
 
+        // Uncomment this if you want to see private messages in the window
         /*void ChatMsg ( FriendChatMsg_t chatMsg )
         {
             byte[] msgData = new byte[ 1024 * 4 ];

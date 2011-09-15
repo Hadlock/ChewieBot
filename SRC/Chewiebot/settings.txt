@@ -1,0 +1,9 @@
+﻿#The layout is simple since I'm lazy and read from lines beginning with ( name=, cmd=, url= ) for parsing info
+name=fffff33
+cmd=!fart
+url=http://www.magicalfartwizard.org/mekk/Chewiebot/test.php
+cmd=!durg
+url=http://www.magicalfartwizard.org/mekk/Chewiebot/test2.php
+name=vvvvv33
+cmd=!poop
+url=http://www.magicalfartwizard.org/mekk/Chewiebot/test2.php

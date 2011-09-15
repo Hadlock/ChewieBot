@@ -106,6 +106,15 @@ namespace Chewie
                 if ( waited )
                     Thread.Sleep ( 100 );
 
+                if ( !chatparser.getLogSettings () )
+                {
+                    Chewiewin.SendtoChewie ( "Error loading settings.txt!" );
+                }
+                else
+                {
+                    Chewiewin.SendtoChewie ( "Loaded settings.txt!" );
+                }
+
                 // get the user again
                 if ( !chatparser.GetUser () )
                 {
@@ -127,6 +136,7 @@ namespace Chewie
                 {
                     Chewiewin.SendtoChewie ( "Got SteamFriends interface!  Waiting for messages..." );
                 }
+
                 while ( firstProc )
                 {
                     
