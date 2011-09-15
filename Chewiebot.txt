@@ -1,0 +1,12 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           //
+// Chewiebot: A steam-chat integrated bot used to kick players from          //
+// Bad Company 2 / Battlefield 3 servers                                     //
+// This bot's code is based on Chat Logger by VoiDeD and was written         //
+// by mekkanare [ mekkanare ( at ) mail ( dot ) ru ]                         //
+// Under the WTFPL: http://sam.zoy.org/wtfpl/                                //
+//                                                                           //
+// Special thanks to VoiDeD and his team for the API at:                     //
+// http://opensteamworks.org                                                 //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
