@@ -25,10 +25,8 @@ namespace Chewie
         public EChatEntryType MessageType;
 
         // Array Lists for parsing the setting txt file.
-        public ArrayList roomSettingsName = new ArrayList ();
-        public ArrayList roomSettingsCMD = new ArrayList ();
-        public ArrayList roomSettingsGET = new ArrayList ();
-        public string[ , ] roomCMDGET = new string[ 64, 129 ];
+        public string[ , ] roomNAMECMD = new string[ 64, 64 ];
+        public string[ , ] roomCMDGET = new string[ 64, 64 ];
 
         // Get file settings
         public void settingfile ()
@@ -55,32 +53,45 @@ namespace Chewie
                 // After we store the file in our array, we can free up those resources
                 fileRd.Close ();
 
-                // Here's where the actual contents are stored in the multi-dimensional array
-                // It is appended like so:
-                // roomCMDGET [ 0, 0 ] = room name
-                // [ 0, 1 ] = command
-                // [ 0, 2 ] = GET
-                // [ 0, 3 ] = command
-                // [ 0, 4 ] = GET
-                // etc.
+              // NAMECMD is as follows:
+              // 0, 0 | Room Name
+              // 0, n | Commands
+              // CMDGET is:
+              // 0, 0 | CMD
+              // 0, 1 | GET
+              // 0, 2 | CMD
+              // 0, 3 | GET
+              // 1, 0 | Room 2, CMD
 
                 for ( int i = 0; i < fileContents.Count; ++i )
                 {
                     if ( ( fileContents[ i ].ToString () ).StartsWith ( nameVar ) )
                     {
-                        roomCMDGET[ roomCNT, 0 ] = fileContents[ i ].ToString ().Remove ( 0, 5 );
+                        roomNAMECMD[ roomCNT, 0 ] = fileContents[ i ].ToString ().Remove ( 0, 5 );
+                        GETCNT = 1;
                         ++roomCNT;
                     }
 
                     if ( ( fileContents[ i ].ToString () ).StartsWith ( cmdVar ) )
                     {
-                        roomCMDGET[ roomCNT -1, GETCNT ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
+                        if ( GETCNT == 1)
+                        {
+                            roomNAMECMD[ roomCNT - 1, GETCNT ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
+                            roomCMDGET[ roomCNT - 1, GETCNT -1 ] = roomNAMECMD[ roomCNT - 1, GETCNT ];
+                        }
+                        else if ( !( GETCNT % 2 == 0 ) && !( GETCNT == 1 ) )
+                        {
+                            roomNAMECMD[ roomCNT - 1, GETCNT - 1 ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
+                            roomCMDGET[ roomCNT - 1, GETCNT - 1 ] = roomNAMECMD[ roomCNT - 1, GETCNT - 1 ];
+                        }
+                        
                         ++GETCNT;
                     }
 
                     if ( ( fileContents[ i ].ToString () ).StartsWith ( getVar ) )
                     {
-                        roomCMDGET[ roomCNT -1, GETCNT ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
+                        if ( GETCNT % 2 == 0 )
+                        roomCMDGET [ roomCNT -1, GETCNT -1] = fileContents[ i ].ToString ().Remove ( 0, 4 );
                         ++GETCNT;
                     }
 

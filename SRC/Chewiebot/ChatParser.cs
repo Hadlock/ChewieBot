@@ -39,7 +39,7 @@
         NativeGetChatRoomName getChatName;
         NativeSendChatMsg sendChatMsg;
 
-        
+        DateTime sixtysec;
 
         //Callback<FriendChatMsg_t> chatCallback;
         Callback<ChatRoomMsg_t> chatRoomCallback;
@@ -58,6 +58,10 @@
             steamClient = Steamworks.CreateInterface<ISteamClient008> ( "SteamClient008" );
             clientEngine = Steamworks.CreateInterface<IClientEngine> ( "CLIENTENGINE_INTERFACE_VERSION002" );
 
+            // This is a one minute timer so the !commands can't be spammed in chat
+            sixtysec = DateTime.Now;
+
+            Program.parsetoChewie ( "Chewiebot started at: " + sixtysec.ToString() );
             if ( steamClient == null )
                 return false;
 
@@ -143,6 +147,22 @@
             return true;
         }
 
+
+        void handleCMDLIST ( int cnt )
+        {
+            string respondSTR = "Commands are: ";
+            string strCMDLIST = "";
+            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
+
+            for ( int cmds = 1; cmds < 64; ++cmds )
+            {
+                // No need to try to handle null strings
+                if ( log.roomNAMECMD[ cnt, cmds ] == null )
+                    break;
+                strCMDLIST += ( log.roomNAMECMD[ cnt, cmds ] + " " );
+            }
+            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( strCMDLIST ), respondSTR.Length + 1 );
+        }
         // handles commands if there is one to handle
         void handleCommands ( int cnt, string chewieCMD, string webURL )
         {
@@ -210,8 +230,7 @@
             log.MessageType = chatType;
             log.MessageTime = DateTime.Now;
 
-            //for ( int cnt = 0; cnt < (log.roomCMDGET.Length - 1); ++cnt )
-            //{
+
 
             string webURL = "";
             string chewieCMD = "";
@@ -219,27 +238,38 @@
             for ( int cnt = 0; cnt < 64; ++cnt )
             {
                 // Why bother scanning empty arrays?
-                if ( log.roomCMDGET[ cnt, 0 ] == null )
+                if ( log.roomNAMECMD[ cnt, 0 ] == null )
                     return;
                 //Debug commands
-                //Program.parsetoChewie ( "Name: " + log.roomCMDGET[ cnt, 0 ] );
-                if ( log.roomCMDGET[ cnt, 0 ] == log.ChatRoomName )
+                //Program.parsetoChewie ( "Name: " + log.roomNAMECMD[ cnt, 0 ] );
+
+                if ( log.roomNAMECMD[ cnt, 0 ] == log.ChatRoomName )
                 {
-                    for ( int comval = 1; comval < 129; ++ comval )
+                    for ( int comval = 0; comval < 64; ++comval )
                     {
+                        //Program.parsetoChewie ( "CMD: " + log.roomCMDGET[ cnt, comval ] );
+
                         // Again, why bother with empty arrays?
                         if ( log.roomCMDGET[ cnt, comval ] == null )
                             return;
 
-                        if ( log.roomCMDGET[ cnt, comval ].Equals (log.Message ) )
+                        if ( log.roomCMDGET[ cnt, comval ].Equals (log.Message ) && log.roomCMDGET [ cnt, comval ] != "!commands")
                         {
                             chewieCMD = log.roomCMDGET[ cnt, comval ];
-                            ++comval;
-                            webURL = log.roomCMDGET[ cnt, comval ];
+                            webURL = log.roomCMDGET[ cnt, comval + 1];
                             handleCommands ( cnt, chewieCMD, webURL );
                             break;
                         }
-                        ++comval;
+                        else if ( log.Message == "!commands" )
+                        {
+                            if ( DateTime.Now > sixtysec.AddSeconds ( 60 ) )
+                            {
+                                sixtysec = DateTime.Now;
+                                handleCMDLIST ( cnt );
+                                break;
+                            }
+                        }
+                       
                     }
                     
                 }
