@@ -201,7 +201,8 @@
             }
             
             sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
-           
+
+            return;
         }
 
        // Parse ChatRoom messages
@@ -239,7 +240,7 @@
             {
                 // Why bother scanning empty arrays?
                 if ( log.roomNAMECMD[ cnt, 0 ] == null )
-                    return;
+                    break;
                 //Debug commands
                 //Program.parsetoChewie ( "Name: " + log.roomNAMECMD[ cnt, 0 ] );
 
@@ -251,7 +252,7 @@
 
                         // Again, why bother with empty arrays?
                         if ( log.roomCMDGET[ cnt, comval ] == null )
-                            return;
+                            break;
 
                         if ( log.roomCMDGET[ cnt, comval ].Equals (log.Message ) && log.roomCMDGET [ cnt, comval ] != "!commands")
                         {
