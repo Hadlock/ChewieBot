@@ -1,10 +1,10 @@
 ﻿#The layout is simple since I'm lazy and read from lines beginning with ( name=, cmd=, url= ) for parsing info
 name=room1
-cmd=command 1
+cmd=!command 1
 url=url 1
-cmd=command 2
+cmd=!command 2
 url=url 2
 name=room 2
-cmd=command 1
+cmd=!command 1
 url=url 1
 #etc...
