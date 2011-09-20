@@ -37,6 +37,7 @@ namespace Chewie
                 StreamReader fileRd = new StreamReader ( fileloc );
                 int roomCNT = 0;
                 int GETCNT = 1;
+                int sortNAMECMD = 1;
 
                 string nameVar = "name=";
                 string cmdVar = "cmd=";
@@ -68,21 +69,23 @@ namespace Chewie
                     if ( ( fileContents[ i ].ToString () ).StartsWith ( nameVar ) )
                     {
                         roomNAMECMD[ roomCNT, 0 ] = fileContents[ i ].ToString ().Remove ( 0, 5 );
+                        sortNAMECMD = 1;
                         GETCNT = 1;
                         ++roomCNT;
                     }
 
                     if ( ( fileContents[ i ].ToString () ).StartsWith ( cmdVar ) )
                     {
-                        if ( GETCNT == 1)
+                        if ( GETCNT == 1 )
                         {
                             roomNAMECMD[ roomCNT - 1, GETCNT ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
-                            roomCMDGET[ roomCNT - 1, GETCNT -1 ] = roomNAMECMD[ roomCNT - 1, GETCNT ];
+                            roomCMDGET[ roomCNT - 1, GETCNT - 1 ] = roomNAMECMD[ roomCNT - 1, GETCNT ];
                         }
                         else if ( !( GETCNT % 2 == 0 ) && !( GETCNT == 1 ) )
                         {
-                            roomNAMECMD[ roomCNT - 1, GETCNT - 1 ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
-                            roomCMDGET[ roomCNT - 1, GETCNT - 1 ] = roomNAMECMD[ roomCNT - 1, GETCNT - 1 ];
+                            ++sortNAMECMD;
+                            roomNAMECMD[ roomCNT - 1, sortNAMECMD ] = fileContents[ i ].ToString ().Remove ( 0, 4 );
+                            roomCMDGET[ roomCNT - 1, GETCNT - 1 ] = fileContents[ i ].ToString ().Remove ( 0, 4 );// roomNAMECMD[ roomCNT - 1, GETCNT - 1 ];
                         }
                         
                         ++GETCNT;

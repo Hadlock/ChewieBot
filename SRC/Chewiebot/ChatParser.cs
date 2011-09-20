@@ -150,18 +150,18 @@
 
         void handleCMDLIST ( int cnt )
         {
-            string respondSTR = "Commands are: ";
-            string strCMDLIST = "";
-            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
+            //string respondSTR = "Commands are: ";
+            string strCMDLIST = "Commands are: ";
+            //sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
 
             for ( int cmds = 1; cmds < 64; ++cmds )
             {
+                strCMDLIST += log.roomNAMECMD[ cnt, cmds ] + " ";
                 // No need to try to handle null strings
                 if ( log.roomNAMECMD[ cnt, cmds ] == null )
                     break;
-                strCMDLIST += ( log.roomNAMECMD[ cnt, cmds ] + " " );
             }
-            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( strCMDLIST ), respondSTR.Length + 1 );
+            sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( strCMDLIST ), strCMDLIST.Length + 1 );
         }
         // handles commands if there is one to handle
         void handleCommands ( int cnt, string chewieCMD, string webURL )
