@@ -3,15 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Text.RegularExpressions;
     using Steam4NET;
     using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.Globalization;
+    using System.Net;
+    using System.IO;
+
+    //using System.Diagnostics;
+    //using System.Globalization;
     //using System.Threading;
     //using System.ComponentModel;
     //using System.Windows.Forms;
-    using System.Net;
-    using System.IO;
 
     // Handling messages for group chat involves using a Virtual Table to call
     // the functions.
@@ -150,9 +152,7 @@
 
         void handleCMDLIST ( int cnt )
         {
-            //string respondSTR = "Commands are: ";
             string strCMDLIST = "Commands are: ";
-            //sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
 
             for ( int cmds = 1; cmds < 64; ++cmds )
             {
@@ -163,6 +163,7 @@
             }
             sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( strCMDLIST ), strCMDLIST.Length + 1 );
         }
+
         // handles commands if there is one to handle
         void handleCommands ( int cnt, string chewieCMD, string webURL )
         {
@@ -193,13 +194,12 @@
             while ( count > 0 );
 
             // clean up the string removing html parses
-            string[] htmlClear = { "<br />", "<strong>", "</strong>" };
+            string htmlClear = @"<(.|\n)*?>";
 
-            for ( int i = 0; i < 3; ++i )
-            {
-                respondSTR = respondSTR.Replace ( htmlClear[ i ], "" );
-            }
-            
+
+            foreach ( Match match in Regex.Matches ( respondSTR, htmlClear ) )
+                respondSTR = Regex.Replace ( respondSTR, htmlClear, "" );
+
             sendChatMsg ( clientFriends.Interface, log.ChatRoom, log.MessageType, System.Text.Encoding.UTF8.GetBytes ( respondSTR ), respondSTR.Length + 1 );
 
             return;
