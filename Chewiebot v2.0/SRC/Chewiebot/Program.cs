@@ -24,9 +24,8 @@ namespace Chewie
     static class Program
     {
 
-        static ChatParser chatparser;
+        public static ChatParser chatparser;
         static Form1 Chewiewin;
-        //static bool isRunning = true;
         public static void parsetoChewie ( string myString )
         {
             Chewiewin.SendtoChewie ( myString );
@@ -66,7 +65,11 @@ namespace Chewie
                         chatparser.GetSteamClient ();
                         ++i;
                         if ( i == 10 )
+                        {
                             MessageBox.Show ( "Error! Unable to find Steam!  Check that it's installed and is updated!" );
+                            Application.Exit ();
+                        }
+
                     }
                     return;
                 }
@@ -144,11 +147,7 @@ namespace Chewie
                     Thread.Sleep ( 10 );
                 }
                 GC.KeepAlive ( ChewieMutex );
-          
-            //static void endProg ()
-            // {
-            //   Environment.Exit ( 0 );
-            //}     
+            
         }
     }
 }

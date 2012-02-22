@@ -1,0 +1,1 @@
+[{"name": "WookWook", "ip": "255.255.0.1", "enabled": true, "maxPlayers": 64, "password": "xxxx", "port": 47200, "abbv": "ww"}, {"name": "TukTuk", "ip": "tuktuk.gameserverproviderurl.com", "enabled": false, "maxPlayers": 48, "password": "yyyy", "port": 47200, "abbv": "tt"}]

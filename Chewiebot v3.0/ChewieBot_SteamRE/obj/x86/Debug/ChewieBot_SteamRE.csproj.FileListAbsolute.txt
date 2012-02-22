@@ -1,0 +1,13 @@
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\ChewieBot_SteamRE.exe
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\ChewieBot_SteamRE.pdb
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\SteamKit2.dll
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\protobuf-net.dll
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\Classless.Hasher.dll
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\SteamKit2.pdb
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\protobuf-net.pdb
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\protobuf-net.xml
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\obj\x86\Debug\ResolveAssemblyReference.cache
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\obj\x86\Debug\ChewieBot_SteamRE.exe
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\obj\x86\Debug\ChewieBot_SteamRE.pdb
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\ChewieBot_SteamRE.exe.config
+I:\Documents\VS2010\ChewieBot_SteamRE\ChewieBot_SteamRE\ChewieBot_SteamRE\bin\Debug\settings.txt

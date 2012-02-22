@@ -1,0 +1,3 @@
+﻿#Steam Chat Room, Silent?, Command, Private?, URL
+Chatroom Name One Exactly,No,!test,No,http://example.com/test.php!server=testserver1
+Chatroom Name Two Exactly,No,!kickplayer,Yes,http://example.com/kickplayerfromserver.php!server=testserver2
